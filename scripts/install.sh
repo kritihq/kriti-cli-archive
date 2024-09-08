@@ -70,9 +70,6 @@ update_profile() {
      if ! grep -q "\.kriti" $PROFILE_FILE; then
         printf "\n${bright_blue}Updating profile ${reset}$PROFILE_FILE\n"
         printf "\n# Kriti\nexport PATH=\"\$PATH:$INSTALL_DIRECTORY\"\n" >> $PROFILE_FILE
-        printf "\nKriti will be available when you open a new terminal.\n"
-        printf "If you want to make Kriti available in this terminal, please run:\n"
-        printf "\nsource $PROFILE_FILE\n"
      fi
    else
      printf "\n${bright_blue}Unable to detect profile file location. ${reset}Please add the following to your profile file:\n"
@@ -108,7 +105,7 @@ main() {
   update_profile
 
   printf "\nKriti CLI installed!\n\n"
-  printf "To get started run ${bright_blue}kriti login${reset}.\n\n"
+  printf "To get started open new terminal window and run ${bright_blue}kriti login${reset}.\n\n"
 }
 
 main
