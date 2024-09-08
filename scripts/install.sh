@@ -21,8 +21,8 @@ probe_arch() {
 probe_os() {
     OS=$(uname -s)
     case $OS in
-        Darwin) OS="Darwin" ;;
-        Linux) OS="Linux" ;;
+        Darwin) OS="darwin" ;;
+        Linux) OS="linux" ;;
         *) printf "Operating system ${OS} is not supported\n"; exit 1 ;;
     esac
 }
