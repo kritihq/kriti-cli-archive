@@ -44,8 +44,8 @@ function Install-KritiCLI {
 
     Write-Host "Installing to $INSTALL_DIRECTORY"
     New-Item -ItemType Directory -Force -Path $INSTALL_DIRECTORY | Out-Null
-    Expand-Archive -Path $downloadFile -DestinationPath $INSTALL_DIRECTORY -Force
-    Remove-Item -Path $downloadFile -Force
+    Expand-Archive -Path "$downloadFile.zip" -DestinationPath $INSTALL_DIRECTORY -Force
+    Remove-Item -Path "$downloadFile.zip" -Force
 }
 
 # Main execution
