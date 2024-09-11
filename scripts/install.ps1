@@ -38,7 +38,7 @@ function Install-KritiCLI {
     $url = "$urlPrefix/kriti_$target.zip"
     $downloadFile = [System.IO.Path]::GetTempFileName()
 
-    Invoke-WebRequest -Uri $url -OutFile $downloadFile -UseBasicParsing
+    Invoke-WebRequest -Uri $url -OutFile "$downloadFile.zip" -UseBasicParsing
 
     Write-Host "Installing to $INSTALL_DIRECTORY"
     New-Item -ItemType Directory -Force -Path $INSTALL_DIRECTORY | Out-Null
