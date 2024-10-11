@@ -10,11 +10,6 @@ function Probe-Arch {
     }
 }
 
-# Function to detect the OS (always "windows" in this case)
-function Probe-OS {
-    return "windows"
-}
-
 # Function to update the PATH
 function Update-PathEnvironment {
     $currentPath = [System.Environment]::GetEnvironmentVariable("PATH", "User")
@@ -31,7 +26,7 @@ function Update-PathEnvironment {
 # Function to install Kriti CLI
 function Install-KritiCLI {
     $urlPrefix = "https://github.com/vinaygaykar/kriti-cli-archive/releases/latest/download/"
-    $target = "${OS}_$ARCH"
+    $target = "windows_$ARCH"
 
     Write-Host "Downloading $target ..."
 
@@ -50,8 +45,7 @@ function Install-KritiCLI {
 Write-Host "Welcome to the Kriti installer!"
 
 $ARCH = Probe-Arch
-$OS = Probe-OS
-$INSTALL_DIRECTORY = "$env:USERPROFILE\.kriti"
+$INSTALL_DIRECTORY = "$env:LocalAppData\Programs\kriti"
 
 Install-KritiCLI
 Update-PathEnvironment
