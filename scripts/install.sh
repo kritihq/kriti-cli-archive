@@ -105,7 +105,7 @@ main() {
   update_profile
 
   printf "\nKriti CLI installed!\n"
-  printf "Open new terminal window and run ${bright_blue}kriti login${reset}.\n\n"
+  printf "Open new terminal window and run ${bright_blue}kriti${reset}.\n\n"
 }
 
 main

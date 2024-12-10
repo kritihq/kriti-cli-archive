@@ -51,4 +51,4 @@ Install-KritiCLI
 Update-PathEnvironment
 
 Write-Host "Kriti CLI installed!"
-Write-Host "To get started, open a new PowerShell window and run 'kriti login'."
+Write-Host "To get started, open a new PowerShell window and run 'kriti'."
