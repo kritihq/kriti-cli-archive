@@ -1,5 +1,4 @@
 # This script is for installing the latest version of Kriti CLI on your Windows machine.
-# Run using
 # powershell -Command "& {Invoke-WebRequest -UseBasicParsing -MaximumRedirection 5 'https://kriti.blog/downloads/kriti-cli/latest?os=windows' | Invoke-Expression}"
 
 # Function to probe the architecture
@@ -12,17 +11,11 @@ function Probe-Arch {
     }
 }
 
-# Function to update the PATH
-function Update-PathEnvironment {
-    $currentPath = [System.Environment]::GetEnvironmentVariable("PATH", "User")
-    if ($currentPath -notlike "*$INSTALL_DIRECTORY*") {
-        $newPath = "$currentPath;$INSTALL_DIRECTORY"
-        [System.Environment]::SetEnvironmentVariable("PATH", $newPath, "User")
-        Write-Host "Updated PATH environment variable."
-    }
-    else {
-        Write-Host "PATH already contains the Kriti directory."
-    }
+# Function to get latest version from API
+function Get-LatestVersion {
+    $apiUrl = "https://kriti.blog/version/kriti-cli/latest"
+    $response = Invoke-RestMethod -Uri $apiUrl
+    return $response.version
 }
 
 # Function to update the PATH
