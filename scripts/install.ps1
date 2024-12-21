@@ -68,6 +68,8 @@ $version = (Get-LatestVersion).Trim()
 $versionDir = Install-KritiCLI -version $version
 Update-PathEnvironment -versionDir $versionDir
 
+Write-Host "=============================================================="
 Write-Host "Kriti CLI version $version installed!"
-Write-Host "To get started, open a new PowerShell window and run 'kriti'."
+Write-Host "CLOSE THIS WINDOW, OPEN NEW ONE AND RUN `kriti` FOR CHANGES TO TAKE EFFECT."
+Write-Host "=============================================================="
 
