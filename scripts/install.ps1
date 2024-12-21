@@ -70,3 +70,4 @@ Update-PathEnvironment -versionDir $versionDir
 
 Write-Host "Kriti CLI version $version installed!"
 Write-Host "To get started, open a new PowerShell window and run 'kriti'."
+
