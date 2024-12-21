@@ -15,7 +15,7 @@ function Probe-Arch {
 function Get-LatestVersion {
     $apiUrl = "https://kriti.blog/version/kriti-cli/latest"
     $response = Invoke-RestMethod -Uri $apiUrl
-    return $response.version
+    return $response
 }
 
 # Function to update the PATH
@@ -63,7 +63,7 @@ Write-Host "Welcome to the Kriti installer!"
 
 $ARCH = Probe-Arch
 $BASE_DIRECTORY = "$env:LocalAppData\Programs\kriti"
-$version = Get-LatestVersion
+$version = (Get-LatestVersion).Trim()
 
 $versionDir = Install-KritiCLI -version $version
 Update-PathEnvironment -versionDir $versionDir
