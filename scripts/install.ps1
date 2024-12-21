@@ -1,4 +1,6 @@
 # This script is for installing the latest version of Kriti CLI on your Windows machine.
+# Run using
+# powershell -Command "& {Invoke-WebRequest -UseBasicParsing -MaximumRedirection 5 'https://kriti.blog/downloads/kriti-cli/latest?os=windows' | Invoke-Expression}"
 
 # Function to probe the architecture
 function Probe-Arch {
@@ -23,32 +25,55 @@ function Update-PathEnvironment {
     }
 }
 
+# Function to update the PATH
+function Update-PathEnvironment {
+    param(
+        [string]$versionDir
+    )
+    $currentPath = [System.Environment]::GetEnvironmentVariable("PATH", "User")
+    
+    # Remove any existing Kriti paths from PATH
+    $pathParts = $currentPath -split ';' | Where-Object { $_ -notlike "*$BASE_DIRECTORY*" }
+    $newPath = ($pathParts + $versionDir) -join ';'
+    
+    [System.Environment]::SetEnvironmentVariable("PATH", $newPath, "User")
+    Write-Host "Updated PATH environment variable to use version $version."
+}
+
 # Function to install Kriti CLI
 function Install-KritiCLI {
-    $urlPrefix = "https://github.com/vinaygaykar/kriti-cli-archive/releases/latest/download/"
+    param(
+        [string]$version
+    )
+    
+    $urlPrefix = "https://github.com/vinaygaykar/kriti-cli-archive/releases/download"
     $target = "windows_$ARCH"
+    $versionDir = Join-Path $BASE_DIRECTORY "v$version"
 
-    Write-Host "Downloading $target ..."
+    Write-Host "Downloading version $version for $target..."
 
-    $url = "$urlPrefix/kriti_$target.zip"
+    $url = "$urlPrefix/$version/kriti_$target.zip"
     $downloadFile = [System.IO.Path]::GetTempFileName()
 
     Invoke-WebRequest -Uri $url -OutFile "$downloadFile.zip" -UseBasicParsing
 
-    Write-Host "Installing to $INSTALL_DIRECTORY"
-    New-Item -ItemType Directory -Force -Path $INSTALL_DIRECTORY | Out-Null
-    Expand-Archive -Path "$downloadFile.zip" -DestinationPath $INSTALL_DIRECTORY -Force
+    Write-Host "Installing to $versionDir"
+    New-Item -ItemType Directory -Force -Path $versionDir | Out-Null
+    Expand-Archive -Path "$downloadFile.zip" -DestinationPath $versionDir -Force
     Remove-Item -Path "$downloadFile.zip" -Force
+
+    return $versionDir
 }
 
 # Main execution
 Write-Host "Welcome to the Kriti installer!"
 
 $ARCH = Probe-Arch
-$INSTALL_DIRECTORY = "$env:LocalAppData\Programs\kriti"
+$BASE_DIRECTORY = "$env:LocalAppData\Programs\kriti"
+$version = Get-LatestVersion
 
-Install-KritiCLI
-Update-PathEnvironment
+$versionDir = Install-KritiCLI -version $version
+Update-PathEnvironment -versionDir $versionDir
 
-Write-Host "Kriti CLI installed!"
+Write-Host "Kriti CLI version $version installed!"
 Write-Host "To get started, open a new PowerShell window and run 'kriti'."
