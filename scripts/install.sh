@@ -27,6 +27,11 @@ probe_os() {
     esac
 }
 
+get_latest_version() {
+    VERSION=$(curl -s -L "https://kriti.blog/version/kriti-cli/latest")
+    echo "$VERSION" | tr -d '[:space:]'
+}
+
 detect_profile() {
   local DETECTED_PROFILE
   DETECTED_PROFILE=''
@@ -66,10 +71,18 @@ detect_profile() {
 
 update_profile() {
    PROFILE_FILE=$(detect_profile)
+   VERSION_DIR="$BASE_DIRECTORY/v$VERSION"
+   
    if [[ -n "$PROFILE_FILE" ]]; then
      if ! grep -q "\.kriti" $PROFILE_FILE; then
+        # Remove any existing Kriti paths
+        sed -i.bak "/\.kriti/d" "$PROFILE_FILE"
+        
         printf "\n${bright_blue}Updating profile ${reset}$PROFILE_FILE\n"
-        printf "\n# Kriti\nexport PATH=\"\$PATH:$INSTALL_DIRECTORY\"\n" >> $PROFILE_FILE
+        printf "\nexport PATH=\"$VERSION_DIR:\$PATH\"\n" >> "$PROFILE_FILE"
+        
+        # Remove backup file
+        rm -f "$PROFILE_FILE.bak"
      fi
    else
      printf "\n${bright_blue}Unable to detect profile file location. ${reset}Please add the following to your profile file:\n"
@@ -78,19 +91,24 @@ update_profile() {
 }
 
 install_kriti_cli() {
-  URL_PREFIX="https://github.com/vinaygaykar/kriti-cli-archive/releases/latest/download/"
+  URL_PREFIX="https://github.com/vinaygaykar/kriti-cli-archive/releases/download"
   TARGET="${OS}_$ARCH"
+  VERSION_DIR="$BASE_DIRECTORY/v$VERSION"
 
   printf "${bright_blue}Downloading ${reset}$TARGET ...\n"
 
-  URL="$URL_PREFIX/kriti_$TARGET.tar.gz"
+  URL="$URL_PREFIX/$VERSION/kriti_$TARGET.tar.gz"
   DOWNLOAD_FILE=$(mktemp -t kriti.XXXXXXXXXX)
 
   curl --progress-bar -L "$URL" -o "$DOWNLOAD_FILE"
-  printf "\n${bright_blue}Installing to ${reset}$INSTALL_DIRECTORY\n"
-  mkdir -p $INSTALL_DIRECTORY
-  tar -C $INSTALL_DIRECTORY -zxf $DOWNLOAD_FILE kriti
-  rm -f $DOWNLOAD_FILE
+  printf "\n${bright_blue}Installing to ${reset}$VERSION_DIR\n"
+    
+  # Create version directory
+  mkdir -p "$VERSION_DIR"
+    
+  # Extract to version directory
+  tar -C "$VERSION_DIR" -zxf "$DOWNLOAD_FILE" kriti
+  rm -f "$DOWNLOAD_FILE"
 }
 
 # do everything in main, so that partial downloads of this file don't mess up the installation
@@ -100,7 +118,9 @@ main() {
   probe_arch
   probe_os
 
-  INSTALL_DIRECTORY="$HOME/.kriti"
+  BASE_DIRECTORY="$HOME/.kriti"
+  VERSION=$(get_latest_version)
+  
   install_kriti_cli
   update_profile
 
