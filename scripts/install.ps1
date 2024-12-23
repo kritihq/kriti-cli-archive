@@ -68,8 +68,8 @@ $version = (Get-LatestVersion).Trim()
 $versionDir = Install-KritiCLI -version $version
 Update-PathEnvironment -versionDir $versionDir
 
-Write-Host "=============================================================="
+# Update current session with new path value
+$env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User") 
 Write-Host "Kriti CLI version $version installed!"
-Write-Host "CLOSE THIS WINDOW, OPEN NEW ONE AND RUN `kriti` FOR CHANGES TO TAKE EFFECT."
-Write-Host "=============================================================="
+Write-Host "Type `kriti` and hit enter to get started."
 
