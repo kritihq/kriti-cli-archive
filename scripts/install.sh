@@ -72,21 +72,38 @@ detect_profile() {
 update_profile() {
    PROFILE_FILE=$(detect_profile)
    VERSION_DIR="$BASE_DIRECTORY/v$VERSION"
-   
+
    if [[ -n "$PROFILE_FILE" ]]; then
-     if ! grep -q "\.kriti" $PROFILE_FILE; then
-        # Remove any existing Kriti paths
-        sed -i.bak "/\.kriti/d" "$PROFILE_FILE"
-        
-        printf "\n${bright_blue}Updating profile ${reset}$PROFILE_FILE\n"
-        printf "\nexport PATH=\"$VERSION_DIR:\$PATH\"\n" >> "$PROFILE_FILE"
-        
-        # Remove backup file
-        rm -f "$PROFILE_FILE.bak"
+     printf "\n${bright_blue}Updating profile ${reset}$PROFILE_FILE\n"
+     
+     # Replace current path
+     # 1. replace $BASE_DIR/.kriti/v* with nothing
+     # 2. replace `::` with `:`
+     # 3. replace `= :...` with `= ...`
+     # 3. replace `=:...` with `=...`
+     # 4. replace `...*:` with `...*`
+     # sed -i.bak "
+     #    s|$BASE_DIRECTORY/v[0-9.]*/\?||g;
+     #    s|::|:|g;
+     #    s|\(=\s*\):|\1|g;
+     #    s|:$||g;
+     #    s|\s*export PATH\s*=\s*\$PATH\s*||g
+     #  " $PROFILE_FILE
+
+     if grep -q "$BASE_DIRECTORY/v[0-9.]*/\?" $PROFILE_FILE
+     then
+       # replace the value inplace
+       sed -i.bak "s|$BASE_DIRECTORY/v[0-9.]*/\?|$VERSION_DIR|g" $PROFILE_FILE
+     else 
+       # append new value to profile file
+       printf "\nexport PATH=\$PATH:$VERSION_DIR\n" >> "$PROFILE_FILE"
      fi
+     
+     # Remove backup file
+     rm -f "$PROFILE_FILE.bak"
    else
      printf "\n${bright_blue}Unable to detect profile file location. ${reset}Please add the following to your profile file:\n"
-     printf "\nexport PATH=\"$INSTALL_DIRECTORY:\$PATH\"\n"
+     printf "\nexport PATH=\"$VERSION_DIR:\$PATH\"\n"
    fi
 }
 
