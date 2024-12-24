@@ -39,7 +39,7 @@ function Install-KritiCLI {
         [string]$version
     )
     
-    $urlPrefix = "https://github.com/vinaygaykar/kriti-cli-archive/releases/download"
+    $urlPrefix = "https://github.com/kritihq/kriti-cli-archive/releases/download"
     $target = "windows_$ARCH"
     $versionDir = Join-Path $BASE_DIRECTORY "v$version"
 

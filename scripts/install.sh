@@ -108,7 +108,7 @@ update_profile() {
 }
 
 install_kriti_cli() {
-  URL_PREFIX="https://github.com/vinaygaykar/kriti-cli-archive/releases/download"
+  URL_PREFIX="https://github.com/kritihq/kriti-cli-archive/releases/download"
   TARGET="${OS}_$ARCH"
   VERSION_DIR="$BASE_DIRECTORY/v$VERSION"
 
