@@ -144,7 +144,7 @@ main() {
   printf "\n=============================================================="
   printf "\nKriti CLI installed!"
   printf "\nCLOSE THIS WINDOW, OPEN NEW ONE AND RUN ${bright_blue}kriti${reset} FOR CHANGES TO TAKE EFFECT."
-  printf "\n=============================================================="
+  printf "\n==============================================================\n"
 }
 
 main

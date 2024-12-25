@@ -72,4 +72,4 @@ Write-Host "=============================================================="
 Write-Host "Kriti CLI version $version installed!"
 Write-Host "CLOSE THIS WINDOW, OPEN NEW ONE AND RUN `kriti` FOR CHANGES TO TAKE EFFECT."
 Write-Host "=============================================================="
-
+Write-Host ""
